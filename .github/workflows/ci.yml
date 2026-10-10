@@ -1,0 +1,59 @@
+name: BestOpp CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-test:
+    name: Backend Lint, Type-Check & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: uv sync
+
+      - name: Run Ruff Linter
+        working-directory: ./backend
+        run: uv run ruff check .
+
+      - name: Run Mypy Type Checking
+        working-directory: ./backend
+        run: uv run mypy app
+
+      - name: Execute Pytest Suite
+        working-directory: ./backend
+        run: uv run pytest app/tests -v
+
+  frontend-check:
+    name: Frontend Lint & Type-Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: TypeScript Check
+        working-directory: ./frontend
+        run: npx tsc --noEmit

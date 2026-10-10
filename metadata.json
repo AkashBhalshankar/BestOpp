@@ -1,0 +1,6 @@
+{
+  "name": "BestOpp — Best Opportunities",
+  "description": "High-leverage engineering career platform with bi-directional skill parity, ghost job classification, and compensation de-obfuscation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
